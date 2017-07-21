@@ -1,38 +1,40 @@
 #!/Users/jdetras/anaconda/bin/python
+# ontology-mapper.py
+# assign rice crop ontology IDs on trait names from a csv file
+# Author: Jeffrey Detras
+# Date: 07-21-2017
 
+#import modules
+import sys
+import getopt
 import pandas as pd
 
-#import trait dictionary 
-td_file = '/Users/jdetras/scripts/ontology-mapper/TD_CO_320_Rice_EN_v5_v160323.csv'
+#import trait dictionary as a dataframe
+td_file = 'TD_CO_320_Rice_EN_v5_v160323.csv'
 td = pd.read_csv(td_file, sep=',', header=0)
 td_df = pd.DataFrame(td)
 #print td_df
 
 #copy trait ID and trait name into a new dataframe
-trait_name = td_df[['Trait ID', 'Trait name']].copy()
+td_trait_header = 'Trait name'
+td_trait_id = 'Trait ID'
+trait_name = td_df[[td_trait_id, td_trait_header]].copy()
 
 #drop duplicate entries for the traits
 trait_name.drop_duplicates(keep=False, inplace=True)
-#trait_name = trait_name[ 'Trait name'].str.lower()
-print trait_name
+#print trait_name
 
 #import query traits for annotation
-query_file = '/Users/jdetras/scripts/ontology-mapper/table.csv'
+query_file = 'table.csv'
 query = pd.read_csv(query_file, sep=',', header=0)
 query_df = pd.DataFrame(query)
 #print query_df
 
-#for row in trait_name.itertuples():
-    #print (row)
- #   print query_df.loc[query_df['trait_name'].isin(trait_name['Trait name'])]
+#assign variable for query trait name column header
+tn_header = 'trait_name'
 
-#for row in trait_name:
-#    print (row)
+#search for exact match for trait_name in query_df
+## currently working for exact match
 
-#print query_df.loc[query_df['trait_name'] == trait_name.loc[trait_name['Trait name']
-
-#for column in query_df:
-#	print (column)
-
-#for trait_name, query_trait_name in test.itertuples(index=False):
-#    print a, b
+for row in trait_name.itertuples():
+    print query_df.loc[query_df[tn_header].isin(trait_name[td_trait_header])]
