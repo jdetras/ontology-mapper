@@ -26,7 +26,7 @@ row = 1
 
 #do the API call for each trait
 for text_to_annotate in query_df[tn_header]:
-    annotations = get_json(REST_URL + "/annotator?&ontologies=CO_320&text=" + urllib2.quote(text_to_annotate)) 
+    annotations = get_json(REST_URL + "/annotator?&ontologies=CO_320&whole_word_only=false&text=" + urllib2.quote(text_to_annotate)) 
     #print query trait, row and annotation from web service call
     print 'Query trait: ' + str(row) + ' : ' + text_to_annotate
     print_annotations(annotations)
