@@ -32,17 +32,19 @@ def main():
     api_key = "d56a0880-f2ae-4a1e-a80d-a538e9027558"
     #row count for query trait
     row = 1
-
+    match = 0
+    no_match = 0
     #do the API call for each trait
     #for text_to_annotate in query_df[tn_header]:
+    mapping_output = open('mapping.txt', 'w')
     for text_to_annotate in unique_trait_name:
         annotations = get_json(REST_URL + "/annotator?&ontologies=CO_320&whole_word_only=true&text=" + \
             urllib2.quote(text_to_annotate)) 
         id_pref = get_mapping(annotations)
         if id_pref is None:
-            print "Term " + str(row) + "\t" + text_to_annotate + "\t" + "No match"
-        else:
-            print "Term " + str(row) + "\t" + text_to_annotate + "\t" + id_pref
+            mapping_output.write("Term " + str(row) + "\t" + text_to_annotate + "\t\t\t" + "no match" + "\n")
+        elif text_to_annotate in id_pref:
+            mapping_output.write("Term " + str(row) + "\t" + text_to_annotate + "\t" + id_pref + "\t" + "exact match""\n") 
         row = row + 1
 
 if __name__ == '__main__':
