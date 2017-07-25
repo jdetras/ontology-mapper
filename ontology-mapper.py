@@ -10,9 +10,9 @@ import urllib2
 import sys
 from annotate_text import get_json
 from annotate_text import print_annotations
-from classes import csv_to_dataframe
-from classes import get_unique_term
-from classes import get_mapping
+from functions import csv_to_dataframe
+from functions import get_unique_term
+from functions import get_mapping
 
 def main():
 
