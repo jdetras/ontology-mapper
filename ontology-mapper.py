@@ -18,9 +18,10 @@ def main():
 
     #import query traits as pandas dataframe
     #query_file = 'table2.csv' #file
-    query_file = 'SNPedia-2015-1122.unix.csv'
+    #query_file = 'SNPedia-2015-1122.unix.csv'
+    query_file = 'snpedia_sample.csv'
     query_df = csv_to_dataframe(query_file)
-    
+    query_df.drop(query_df.ix[:,'Unnamed: 14':'Unnamed: 25'].columns, axis=1, inplace=True)
     #declare variable for query trait name column header
     tn_header = 'trait_name'
 
@@ -36,16 +37,31 @@ def main():
     no_match = 0
     #do the API call for each trait
     #for text_to_annotate in query_df[tn_header]:
-    mapping_output = open('mapping.txt', 'w')
-    for text_to_annotate in unique_trait_name:
+    mapping_output = open('mapping2.csv', 'w')
+    for row in query_df.itertuples():
+        #print (row)
+        text_to_annotate = row[12]
+        #text_to_annotate
+    #for text_to_annotate in query_df[tn_header]:
+    #for text_to_annotate in unique_trait_name:
         annotations = get_json(REST_URL + "/annotator?&ontologies=CO_320&whole_word_only=true&text=" + \
             urllib2.quote(text_to_annotate)) 
         id_pref = get_mapping(annotations)
+        #print id_pref
         if id_pref is None:
-            mapping_output.write("Term " + str(row) + "\t" + text_to_annotate + "\t\t\t" + "no match" + "\n")
-        elif text_to_annotate in id_pref:
-            mapping_output.write("Term " + str(row) + "\t" + text_to_annotate + "\t" + id_pref + "\t" + "exact match""\n") 
-        row = row + 1
+            query_df['CO_ID'] = ''
+            query_df['CO_name'] = ''
+        else:
+            query_df['CO_ID'] = id_pref[32:46]
+            query_df['CO_name'] = id_pref[47:]
+    output = query_df.to_csv(index=False)
+    mapping_output.write(output)
+        #if id_pref is None:
+            #mapping_output.write(+ "\t" + text_to_annotate + "\t\t\t" + "no match" + "\n")
+            #mapping_output.write("Term " + str(row) + "\t" + text_to_annotate + "\t\t\t" + "no match" + "\n")
+        #elif text_to_annotate in id_pref:
+        #    mapping_output.write("Term " + str(row) + "\t" + text_to_annotate + "\t" + id_pref + "\t" + "exact match""\n") 
+        #row = row + 1
 
 if __name__ == '__main__':
     main()
