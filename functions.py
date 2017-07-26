@@ -30,5 +30,5 @@ def get_mapping(annotations, get_class=True):
        class_details = get_json(result["annotatedClass"]["links"]["self"]) if get_class else result["annotatedClass"]
        class_id = class_details["@id"]
        class_pref = class_details["prefLabel"]
-       return class_id + "\t" + class_pref
+       return class_id + "," + class_pref
        #print search_term + "\t" + class_details["@id"] + "\t" + class_details["prefLabel"]
