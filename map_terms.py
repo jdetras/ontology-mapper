@@ -29,11 +29,12 @@ def main():
     
     mapping_df.dropna(axis=1, how='all', inplace=True)
     mapping_df.dropna(axis=0, how='all', inplace=True)
-
+   
     #declare variable for trait name header
     query_trait_header = 'trait_name'
     mapping_trait_header = 'trait_name'
 
+    query_df[query_trait_header] = query_df[query_trait_header].str.lower()
     #map terms
     print 'Mapping terms...'
     merged_df = query_df.merge(mapping_df, left_on=query_trait_header, right_on=mapping_trait_header, how='outer')
